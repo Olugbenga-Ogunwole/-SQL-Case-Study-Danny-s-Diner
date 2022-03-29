@@ -95,3 +95,25 @@ How many days has each customer visited Dannys Diner?
 | A        | 4      |
 | B        | 6      |
 | C        | 2      |
+
+
+**Query #3**
+
+ What was the first item from the menu purchased by each customer?
+ 
+SELECT distinct(customer_id) customer1, order_date, product_name item
+FROM dannys_diner.sales s
+JOIN dannys_diner.menu m
+ON s.product_id = m.product_id
+ORDER BY order_date, customer1
+LIMIT 4;
+
+
+| customer1 | order_date               | item  |
+| --------- | ------------------------ | ----- |
+| A         | 2021-01-01T00:00:00.000Z | curry |
+| A         | 2021-01-01T00:00:00.000Z | sushi |
+| B         | 2021-01-01T00:00:00.000Z | curry |
+| C         | 2021-01-01T00:00:00.000Z | ramen |
+
+
