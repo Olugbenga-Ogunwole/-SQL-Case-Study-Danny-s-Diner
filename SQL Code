@@ -137,6 +137,35 @@ LIMIT 1
 
 **Query #5**
  Which item was the most popular for each customer?
+ 
+ 
+ SELECT s.customer_id, count(*), m.product_name item
+FROM dannys_diner.menu m
+JOIN dannys_diner.sales s
+ON m.product_id = s.product_id
+GROUP BY 1, 3
+ORDER BY 2 desc 
+LIMIT 5
+
+
+| customer_id | count | item  |
+| ----------- | ----- | ----- |
+| C           | 3     | ramen |
+| A           | 3     | ramen |
+| B           | 2     | curry |
+| B           | 2     | sushi |
+| B           | 2     | ramen |
+
+
+
+
+
+
+
+
+
+
+ 
 
 
 
