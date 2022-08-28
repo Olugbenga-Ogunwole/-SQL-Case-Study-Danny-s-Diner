@@ -211,7 +211,6 @@ WHERE ranked = 1
 ;
 
 
-
 | customer_id | product_name | order_date               | join_date                | ranked |
 | ----------- | ------------ | ------------------------ | ------------------------ | ------ |
 | A           | sushi        | 2021-01-01T00:00:00.000Z | 2021-01-07T00:00:00.000Z | 1      |
@@ -219,8 +218,33 @@ WHERE ranked = 1
 | B           | sushi        | 2021-01-04T00:00:00.000Z | 2021-01-09T00:00:00.000Z | 1      |
 
 
+**Query #8**
  
+What is the total items and amount spent for each member before they became a member?
 
+SELECT 
+	t1.customer_id,
+    count(t1.product_id) as total_items,
+    sum(t2.price) as amount_spent
+FROM 
+	dannys_diner.sales t1
+    JOIN dannys_diner.menu t2 on (t1.product_id = t2.product_id)
+    JOIN dannys_diner.members t3 on (t1.customer_id = t3.customer_id)
+WHERE
+	t1.order_date < t3.join_date
+GROUP BY 
+	t1.customer_id
+;
+
+
+| customer_id | total_items | amount_spent |
+| ----------- | ----------- | ------------ |
+| B           | 3           | 40           |
+| A           | 2           | 25           |
+
+
+	
+	
 
 
 
