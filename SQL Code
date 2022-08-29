@@ -246,5 +246,36 @@ GROUP BY
 	
 	
 
+**Query #9**
+
+    WITH price_points_cte AS
+    (
+    SELECT 
+    	*,
+        CASE
+        	WHEN t2.product_name = 'sushi' THEN t2.price * 20
+            ELSE t2.price * 10
+        END as points_earned
+    FROM 
+    	dannys_diner.menu t2
+    )
+    SELECT 
+    	t1.customer_id,
+    	sum(t2.points_earned)
+    FROM
+    	price_points_cte t2
+        JOIN dannys_diner.sales t1 on(t1.product_id = t2.product_id)
+    GROUP BY
+    	t1.customer_id
+    ORDER BY 
+    	2 desc
+ 
+ 
+
+| customer_id | sum |
+| ----------- | --- |
+| B           | 940 |
+| A           | 860 |
+| C           | 360 |
 
 
