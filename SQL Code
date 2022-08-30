@@ -247,6 +247,7 @@ GROUP BY
 	
 
 **Query #9**
+If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
 
     WITH price_points_cte AS
     (
@@ -277,5 +278,47 @@ GROUP BY
 | B           | 940 |
 | A           | 860 |
 | C           | 360 |
+
+
+**Query #10**
+
+In the first week after a customer joins the program (including their join date) they earn 2x points on all items, not just sushi - how many points do customer A and B have at the end of January?
+
+WITH first_week_cte AS 
+(
+  SELECT
+  	t1.customer_id,
+  	t1.order_date,
+  	t2.product_id,
+  	t2.product_name,
+  	t2.price,
+  	t3.join_date,
+  	CASE
+  		WHEN t1.order_date BETWEEN t3.join_date AND (t3.join_date + 6) AND t2.product_name = 'sushi' THEN t2.price * 2 * 20
+  		WHEN t1.order_date BETWEEN t3.join_date AND (t3.join_date + 6) THEN t2.price * 2 * 10
+  		WHEN t2.product_name = 'sushi' THEN t2.price * 20
+  		ELSE t2.price * 1 * 10
+  	END as point_bonus
+  	
+  FROM
+  	dannys_diner.sales t1
+  	JOIN dannys_diner.menu t2 on (t1.product_id = t2.product_id)
+  	JOIN dannys_diner.members t3 on (t1.customer_id = t3.customer_id)
+)
+
+SELECT
+	customer_id,
+    sum(point_bonus)
+FROM 
+	first_week_cte
+GROUP BY
+    customer_id
+
+
+
+| customer_id | sum  |
+| ----------- | ---- |
+| A           | 1370 |
+| B           | 1140 |
 
 
